@@ -12,9 +12,9 @@
     "lint": "eslint -f unix .",
     "inspect": "jsinspect",
     "pretest": "npm run lint && npm run inspect && npm run nsp && npm run _deps-check",
-    "_test": "node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*",
+    "__test": "node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*",
     "test": "npm run _test",
-    "__test": "echo \"Warning: no test specified\" && exit 0",
+    "_test": "echo \"Warning: no test specified\" && exit 0",
     "___test": "echo \"Error: no test specified\" && exit 1",
     "test-travis": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*",
     "_commit": "git commit -am \"commit by 'npm run commit'\"",
@@ -29,7 +29,7 @@
     "coverall": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "keywords": [
-      "configuration,config,conf,environment,env,directories,directory,dir,command,line,arguments"
+    "configuration,config,conf,environment,env,directories,directory,dir,command,line,arguments"
   ],
   "author": "Alexander <alykoshin@gmail.com>",
   "license": "MIT",
@@ -42,6 +42,8 @@
   },
   "homepage": "https://github.com/alykoshin/config-dir-all",
   "dependencies": {
+    "mini-assign": "^0.1.1",
+    "require-dir-all": "^0.4.1"
   },
   "devDependencies": {
     "chai": "^3.4.1",
