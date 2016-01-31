@@ -21,10 +21,10 @@ var path = require('path');
 var os = require('os');
 
 var req = require('require-dir-all');
-var assign = require('mini-assign');
+var deepAssign = require('mini-deep-assign');
 
 
-var getDirs = function(options) {
+var getDirs = function(/*options*/) {
 
   var dirs = [ 'default' ];
 
@@ -51,7 +51,7 @@ var getDirs = function(options) {
 };
 
 
-var getFromDirs = function(rootDir, subDirs, options) {
+var getFromDirs = function(rootDir, subDirs/*, options*/) {
   var configs = [];
 
   for (var len=subDirs.length, i=0; i<len; ++i) {
@@ -98,7 +98,7 @@ var stringToConfig = function(s, nameOfString) {
 };
 
 
-var getFromEnv = function(options) {
+var getFromEnv = function(/*options*/) {
   var envConfig = process.env.NODE_CONFIG;
   var config = stringToConfig(envConfig, 'Environment variable NODE_CONFIG');
 
@@ -107,7 +107,7 @@ var getFromEnv = function(options) {
 };
 
 
-var getFromArgs = function(options) {
+var getFromArgs = function(/*options*/) {
 
   var argKey  = '--';
   var argName = 'NODE_CONFIG';
@@ -136,7 +136,8 @@ function mergeConfigs(configs) {
   var config = {};
 
   for (var len=configs.length, i=0; i<len; ++i) {
-    config = Object.assign ? Object.assign(config, configs[ i ]) : assign(config, configs[ i ]);
+    //config = Object.assign ? Object.assign(config, configs[ i ]) : assign(config, configs[ i ]);
+    config = deepAssign(config, configs[ i ]);
   }
 
   return config;

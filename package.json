@@ -42,18 +42,18 @@
   },
   "homepage": "https://github.com/alykoshin/config-dir-all",
   "dependencies": {
-    "mini-assign": "^0.1.1",
-    "require-dir-all": "^0.4.1"
+    "mini-deep-assign": "0.0.1",
+    "require-dir-all": "^0.4.3"
   },
   "devDependencies": {
-    "chai": "^3.4.1",
-    "coveralls": "^2.11.4",
+    "chai": "^3.5.0",
+    "coveralls": "^2.11.6",
     "eslint": "^1.10.3",
-    "istanbul": "^0.4.1",
-    "jshint": "^2.8.0",
+    "istanbul": "^0.4.2",
+    "jshint": "^2.9.1",
     "jsinspect": "^0.7.2",
-    "mocha": "^2.3.4",
+    "mocha": "^2.4.5",
     "mockery": "^1.4.0",
-    "sinon": "^1.17.2"
+    "sinon": "^1.17.3"
   }
 }

@@ -1,13 +1,18 @@
 'use strict';
 
-var ports = {
-  'httpPort': 8080,
-  'httpsPort': 8081
-};
+
+var httpPort =  8080;
+var httpsPort =  8081;
 
 var devConfig = {
-  client: ports,
-  server: ports
+  client: {
+    url: 'http://localhost:' + httpPort
+  },
+  server: {
+    httpPort: httpPort,
+    httpsPort:httpsPort
+  }
 };
+
 
 module.exports = devConfig;
