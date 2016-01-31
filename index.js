@@ -29,14 +29,14 @@ var getDirs = function(/*options*/) {
   var dirs = [ 'default' ];
 
   var env = process.env.NODE_ENV;
-  console.log('* process.env.NODE_ENV: ' + env);
+  //console.log('* process.env.NODE_ENV: ' + env);
 
   if (typeof env !== 'undefined') {
     dirs.push(env);
   }
 
   var hostname = os.hostname();
-  console.log('* os.hostname(): ' + hostname);
+  //console.log('* os.hostname(): ' + hostname);
 
   if (typeof hostname !== 'undefined') {
     dirs.push(hostname);
@@ -46,7 +46,7 @@ var getDirs = function(/*options*/) {
     dirs.push(path.join(env, hostname));
   }
 
-  console.log('* getDirs(): dirs:' + JSON.stringify(dirs,null,1));
+  //console.log('* getDirs(): dirs:' + JSON.stringify(dirs,null,1));
   return dirs;
 };
 
