@@ -147,7 +147,7 @@ function mergeConfigs(configs) {
 }
 
 function ensureRootExists(relOrAbsDir) {
-  var originalModule = moduleParent(module, options._parentsToSkip);
+  var originalModule = moduleParent(module, 0);
   var parentDir      = path.dirname(originalModule.filename);
   var absDir         = path.resolve(parentDir, relOrAbsDir);
   if (!dirExistsSync(absDir)) {
