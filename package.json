@@ -43,6 +43,7 @@
   "homepage": "https://github.com/alykoshin/config-dir-all",
   "dependencies": {
     "mini-deep-assign": "0.0.2",
+    "module-parent": "0.0.1",
     "require-dir-all": "^0.4.4"
   },
   "devDependencies": {

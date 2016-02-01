@@ -22,11 +22,12 @@ var path = require('path');
 
 var req = require('require-dir-all');
 var deepAssign = require('mini-deep-assign');
+var moduleParent = require('module-parent');
 
 var dirExistsSync = require('./lib/dir-exists').sync;
 
 
-var getDirs = function(/*options*/) {
+var buildDirList = function(/*options*/) {
 
   var dirs = [ 'default' ];
 
@@ -145,16 +146,23 @@ function mergeConfigs(configs) {
   return config;
 }
 
+function ensureRootExists(relOrAbsDir) {
+  var originalModule = moduleParent(module, options._parentsToSkip);
+  var parentDir      = path.dirname(originalModule.filename);
+  var absDir         = path.resolve(parentDir, relOrAbsDir);
+  if (!dirExistsSync(absDir)) {
+    throw 'Directory does not exists: "' + relOrAbsDir + '"';
+  }
+  return absDir;
+}
 
-var configure = function(rootDir, options) {
+var configure = function(relOrAbsDir, options) {
   options = options || {};
 
-  if (!dirExistsSync(rootDir)) {
-    throw 'Directory does not exists: "' + rootDir + '"';
-  }
+  ensureRootExists(relOrAbsDir);
 
-  var subDirs = getDirs(options);
-  var configs = getFromDirs(rootDir, subDirs, options);
+  var subDirs = buildDirList(options);
+  var configs = getFromDirs(relOrAbsDir, subDirs, options);
   configs.push(getFromEnv(options));
   configs.push(getFromArgs(options));
 
