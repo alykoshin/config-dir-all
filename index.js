@@ -17,11 +17,13 @@
 
  */
 
-var path = require('path');
 var os = require('os');
+var path = require('path');
 
 var req = require('require-dir-all');
 var deepAssign = require('mini-deep-assign');
+
+var dirExistsSync = require('./lib/dir-exists').sync;
 
 
 var getDirs = function(/*options*/) {
@@ -147,6 +149,9 @@ function mergeConfigs(configs) {
 var configure = function(rootDir, options) {
   options = options || {};
 
+  if (!dirExistsSync(rootDir)) {
+    throw 'Directory does not exists: "' + rootDir + '"';
+  }
 
   var subDirs = getDirs(options);
   var configs = getFromDirs(rootDir, subDirs, options);

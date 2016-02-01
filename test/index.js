@@ -25,9 +25,11 @@ describe('config-dir-all', function () {
 
   });
 
-  it('should have unit test', function () {
+  it('should throw if directory does not exists', function () {
 
-    assert(false, 'Please add unit tests.');
+    expect( function() {
+      var config = require('../')('this-directory-does-not-exists');
+    }).throw();
 
   });
 
