@@ -1,6 +1,6 @@
 {
   "name": "config-dir-all",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Configuration for multiple deployments",
   "main": "./index.js",
   "scripts": {
