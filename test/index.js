@@ -39,10 +39,11 @@ describe('config-dir-all', function () {
 
   });
 
-  it('# throw if directory does not exists', function () {
+  it('# not throw if directory does not exists', function () {
     expect( function() {
-      require('../')('this-directory-does-not-exists');
-    }).throw();
+      var config = require('../')('this-directory-does-not-exists');
+      expect(config).eql({});
+    }).not.throw();
   });
 
   it('# read single config', function () {

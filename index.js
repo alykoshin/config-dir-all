@@ -163,12 +163,15 @@ function mergeConfigs(configs) {
   return config;
 }
 
-function ensureRootExists(relOrAbsDir) {
+function ensureRootExists(relOrAbsDir, options) {
   var originalModule = moduleParent(module, 0);
   var parentDir      = path.dirname(originalModule.filename);
   var absDir         = path.resolve(parentDir, relOrAbsDir);
   if (!miniFs.dirExistsSync(absDir)) {
-    throw 'Directory does not exists: "' + relOrAbsDir + '"';
+    //throw 'Directory does not exists: "' + relOrAbsDir + '"';
+    if (options.verbose) {
+      console.log('Directory does not exists: "' + relOrAbsDir + '"');
+    }
   }
   return absDir;
 }
@@ -184,7 +187,7 @@ var configure = function(relOrAbsDir, options) {
   var configs = [];
 
   for (var len=relOrAbsDir.length, i=0; i<len; ++i) {
-    ensureRootExists(relOrAbsDir[i]);
+    ensureRootExists(relOrAbsDir[i], options);
     var conf = getFromDirs(relOrAbsDir[i], subDirs, options);
     configs = configs.concat(conf);
   }
