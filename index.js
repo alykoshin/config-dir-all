@@ -23,33 +23,50 @@ var path = require('path');
 var req = require('require-dir-all');
 var deepAssign = require('mini-deep-assign');
 var moduleParent = require('module-parent');
-
 var miniFs = require('mini-fs');
 
 
-var buildDirList = function(/*options*/) {
+var buildDirList = function(options) {
 
-  var dirs = [ 'default' ];
-
-  var env = process.env.NODE_ENV;
-  //console.log('* process.env.NODE_ENV: ' + env);
-
-  if (typeof env !== 'undefined') {
-    dirs.push(env);
+  function pushDefault(dirs) {
+    dirs.push('default');
   }
 
-  var hostname = os.hostname();
-  //console.log('* os.hostname(): ' + hostname);
-
-  if (typeof hostname !== 'undefined') {
-    dirs.push(hostname);
+ function pushNodeEnv(dirs) {
+   var env = process.env.NODE_ENV;
+   //console.log('* process.env.NODE_ENV: ' + env);
+   if (typeof env !== 'undefined') {
+     dirs.push(env);
+   }
   }
 
-  if (typeof env !== 'undefined' && typeof hostname !== 'undefined') {
-    dirs.push(path.join(env, hostname));
+ function pushHostname(dirs) {
+   var hostname = os.hostname();
+   //console.log('* os.hostname(): ' + hostname);
+   if (typeof hostname !== 'undefined') {
+     dirs.push(hostname);
+   }
   }
 
-  //console.log('* getDirs(): dirs:' + JSON.stringify(dirs,null,1));
+ function pushNodeEnvHostname(dirs) {
+   var env = process.env.NODE_ENV;
+   var hostname = os.hostname();
+   if (typeof env !== 'undefined' && typeof hostname !== 'undefined') {
+     dirs.push(path.join(env, hostname));
+   }
+ }
+
+  //var dirs = [ 'default' ];
+  var dirs = [];
+  pushDefault(dirs);
+  pushNodeEnv(dirs);
+  pushHostname(dirs);
+  pushNodeEnvHostname(dirs);
+
+  if (options.verbose) {
+    console.log('* getDirs(): dirs:' + JSON.stringify(dirs,null,1));
+  }
+
   return dirs;
 };
 
@@ -162,18 +179,21 @@ var configure = function(relOrAbsDir, options) {
   if (typeof relOrAbsDir == 'string') {
     relOrAbsDir = [relOrAbsDir];
   }
+
+  var subDirs = buildDirList(options);
   var configs = [];
+
   for (var len=relOrAbsDir.length, i=0; i<len; ++i) {
     ensureRootExists(relOrAbsDir[i]);
-    var subDirs = buildDirList(options);
     var conf = getFromDirs(relOrAbsDir[i], subDirs, options);
-    //console.log('subDirs:', subDirs);
-    //console.log('conf:', conf);
     configs = configs.concat(conf);
   }
   configs.push(getFromEnv(options));
   configs.push(getFromArgs(options));
 
+  if (options.verbose) {
+    console.log('* configure(): configs:' + JSON.stringify(configs));
+  }
   //console.log('* configure(): configs: '+ JSON.stringify(configs,null,2));
 
   var config = mergeConfigs(configs);

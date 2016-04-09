@@ -1,4 +1,5 @@
 {
-  "key1": "config2-value1",
-  "key2": "config2-value2"
+  "key": "config2-default-value",
+  "key2": "config2-default-value2",
+  "key3": "config2-default-value3"
 }
