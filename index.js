@@ -24,7 +24,7 @@ var req = require('require-dir-all');
 var deepAssign = require('mini-deep-assign');
 var moduleParent = require('module-parent');
 
-var dirExistsSync = require('./lib/dir-exists').sync;
+var miniFs = require('mini-fs');
 
 
 var buildDirList = function(/*options*/) {
@@ -150,7 +150,7 @@ function ensureRootExists(relOrAbsDir) {
   var originalModule = moduleParent(module, 0);
   var parentDir      = path.dirname(originalModule.filename);
   var absDir         = path.resolve(parentDir, relOrAbsDir);
-  if (!dirExistsSync(absDir)) {
+  if (!miniFs.dirExistsSync(absDir)) {
     throw 'Directory does not exists: "' + relOrAbsDir + '"';
   }
   return absDir;
@@ -159,10 +159,18 @@ function ensureRootExists(relOrAbsDir) {
 var configure = function(relOrAbsDir, options) {
   options = options || {};
 
-  ensureRootExists(relOrAbsDir);
-
-  var subDirs = buildDirList(options);
-  var configs = getFromDirs(relOrAbsDir, subDirs, options);
+  if (typeof relOrAbsDir == 'string') {
+    relOrAbsDir = [relOrAbsDir];
+  }
+  var configs = [];
+  for (var len=relOrAbsDir.length, i=0; i<len; ++i) {
+    ensureRootExists(relOrAbsDir[i]);
+    var subDirs = buildDirList(options);
+    var conf = getFromDirs(relOrAbsDir[i], subDirs, options);
+    //console.log('subDirs:', subDirs);
+    //console.log('conf:', conf);
+    configs = configs.concat(conf);
+  }
   configs.push(getFromEnv(options));
   configs.push(getFromArgs(options));
 
