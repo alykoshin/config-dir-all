@@ -43,15 +43,15 @@
   "homepage": "https://github.com/alykoshin/config-dir-all",
   "dependencies": {
     "mini-deep-assign": "0.0.6",
-    "mini-fs": "0.0.2",
+    "mini-fs": "0.0.3",
     "module-parent": "0.0.2",
     "require-dir-all": "^0.4.9"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "coveralls": "^2.11.8",
-    "eslint": "^2.4.0",
-    "istanbul": "^0.4.2",
+    "coveralls": "^2.11.9",
+    "eslint": "^2.7.0",
+    "istanbul": "^0.4.3",
     "jshint": "^2.9.1",
     "jsinspect": "^0.8.0",
     "mocha": "^2.4.5",
