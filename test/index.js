@@ -17,6 +17,16 @@ describe('config-dir-all', function () {
   var hostnameDir = __dirname + '/config2/'+hostname;
   var hostnameFile = hostnameDir+'/test.json';
 
+  function rmHostnameFile() {
+    try {
+      fs.unlinkSync(hostnameFile);
+      fs.rmdirSync(hostnameDir);
+    } catch(e) {
+      // hide exception if not exists
+    }
+  }
+
+
   before('before', function () {
 
   });
@@ -24,22 +34,18 @@ describe('config-dir-all', function () {
   beforeEach('beforeEach', function () {
     //delete process.env.NODE_ENV = undefined;
     delete process.env.NODE_ENV;
-   });
+    rmHostnameFile();
+  });
 
   afterEach('afterEach', function () {
-    try {
-      fs.unlinkSync(hostnameFile);
-      fs.rmdirSync(hostnameDir);
-    } catch(e) {
-      // hide exception if not exists
-    }
-  });
+    rmHostnameFile();
+   });
 
   after('after', function () {
 
   });
 
-  it('# not throw if directory does not exists', function () {
+  it('# not throw if directory does not exists, return empty config', function () {
     expect( function() {
       var config = require('../')('this-directory-does-not-exists');
       expect(config).eql({});
@@ -79,7 +85,8 @@ describe('config-dir-all', function () {
 
   it('# read array of config dirs, NODE_ENV, hostname', function () {
     process.env.NODE_ENV = 'testenv';
-    mkdirp(hostnameDir);
+
+    mkdirp.sync(hostnameDir);
     fs.writeFileSync(hostnameFile, JSON.stringify({
       'key': 'config2-hostname-value',
       'key2': 'config2-hostname-value2',
