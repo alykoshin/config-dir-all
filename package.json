@@ -10,7 +10,7 @@
     "_check-changes": "echo '* Checking if git directory is clean... '; bash -c '[[ -z $(git status -uno --porcelain) ]]'",
     "update-deps": "npm run _check-changes && npm run _deps-update && npm test && git commit -am 'updated deps'",
     "lint": "eslint -f unix .",
-    "inspect": "jsinspect",
+    "inspect": "jsinspect --ignore 'coverage|test'",
     "pretest": "npm run lint && npm run inspect && npm run nsp && npm run _deps-check",
     "_test": "node ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec ./test/*",
     "test": "npm run _test",
@@ -42,21 +42,21 @@
   },
   "homepage": "https://github.com/alykoshin/config-dir-all",
   "dependencies": {
-    "mini-deep-assign": "0.0.6",
-    "mini-fs": "0.0.3",
+    "mini-deep-assign": "0.0.8",
+    "mini-fs": "0.0.4",
     "module-parent": "0.0.2",
-    "require-dir-all": "^0.4.9"
+    "require-dir-all": "^0.4.12"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "coveralls": "^2.11.9",
-    "eslint": "^2.8.0",
-    "istanbul": "^0.4.3",
-    "jshint": "^2.9.1",
-    "jsinspect": "^0.8.0",
+    "coveralls": "^2.13.0",
+    "eslint": "^3.19.0",
+    "istanbul": "^0.4.5",
+    "jshint": "^2.9.4",
+    "jsinspect": "^0.12.4",
     "mkdirp": "^0.5.1",
-    "mocha": "^2.4.5",
-    "mockery": "^1.6.2",
-    "sinon": "^1.17.3"
+    "mocha": "^3.2.0",
+    "mockery": "^2.0.0",
+    "sinon": "^2.1.0"
   }
 }
