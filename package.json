@@ -43,20 +43,20 @@
   "homepage": "https://github.com/alykoshin/config-dir-all",
   "dependencies": {
     "mini-deep-assign": "0.0.8",
-    "mini-fs": "0.0.4",
+    "mini-fs": "0.2.1",
     "module-parent": "0.0.2",
-    "require-dir-all": "^0.4.12"
+    "require-dir-all": "^0.4.15"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "coveralls": "^2.13.0",
-    "eslint": "^3.19.0",
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.6",
+    "eslint": "^6.1.0",
     "istanbul": "^0.4.5",
-    "jshint": "^2.9.4",
-    "jsinspect": "^0.12.4",
+    "jshint": "^2.10.2",
+    "jsinspect": "^0.12.7",
     "mkdirp": "^0.5.1",
-    "mocha": "^3.2.0",
-    "mockery": "^2.0.0",
-    "sinon": "^2.1.0"
+    "mocha": "^6.2.0",
+    "mockery": "^2.1.0",
+    "sinon": "^7.4.1"
   }
 }
