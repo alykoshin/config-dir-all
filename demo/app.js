@@ -2,7 +2,7 @@
  * Created by alykoshin on 31.01.16.
  */
 
-//var config = require('../')('/root/1');
-var config = require('../')('config');
+//const config = require('../')('/root/1');
+const config = require('../')('config', {throwNoDir:true});
 
 console.log(config);

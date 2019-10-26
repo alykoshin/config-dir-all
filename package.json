@@ -15,6 +15,7 @@
     "_test": "nyc ./node_modules/mocha/bin/_mocha -- -R spec ./test/**/*",
     "_test-report": "nyc report --reporter=html && nyc report --reporter=text-lcov > coverage/coverage.lcov",
     "test": "npm run _test && npm run _test-report",
+    "test-travis": "npm run _test && npm run _test-report",
     "__test": "echo \"Warning: no test specified\" && exit 0",
     "___test": "echo \"Error: no test specified\" && exit 1",
     "_commit": "git commit -am \"commit by 'npm run commit'\"",
@@ -48,6 +49,7 @@
   },
   "homepage": "https://github.com/alykoshin/config-dir-all",
   "dependencies": {
+    "debug": "^4.1.1",
     "mini-deep-assign": "0.0.8",
     "mini-fs": "0.2.1",
     "module-parent": "0.0.2",
@@ -57,15 +59,15 @@
     "chai": "^4.2.0",
     "chai-arrays": "^2.0.0",
     "chai-things": "^0.2.0",
-    "coveralls": "^3.0.6",
-    "eslint": "^6.1.0",
+    "coveralls": "^3.0.7",
+    "eslint": "^6.6.0",
     "jshint": "^2.10.2",
     "jsinspect": "^0.12.7",
     "mkdirp": "^0.5.1",
-    "mocha": "^6.2.0",
+    "mocha": "^6.2.2",
     "mocha-lcov-reporter": "^1.3.0",
     "mockery": "^2.1.0",
-    "nyc": "^14.1.1",
-    "sinon": "^7.4.1"
+    "nyc": "^15.0.0-beta.0",
+    "sinon": "^7.5.0"
   }
 }

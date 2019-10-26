@@ -17,80 +17,78 @@
 
  */
 
-var os = require('os');
-var path = require('path');
+const os = require('os');
+const path = require('path');
 
-var req = require('require-dir-all');
-var deepAssign = require('mini-deep-assign');
-var moduleParent = require('module-parent');
-var miniFs = require('mini-fs');
+const debug = require('debug')('config-dir-all');
+
+const req = require('require-dir-all');
+const deepAssign = require('mini-deep-assign');
+const moduleParent = require('module-parent');
+const miniFs = require('mini-fs');
 
 
-var buildDirList = function(options) {
+const buildDirList = function(options) {
 
   function pushDefault(dirs) {
     dirs.push('default');
   }
 
- function pushNodeEnv(dirs) {
-   var env = process.env.NODE_ENV;
-   //console.log('* process.env.NODE_ENV: ' + env);
-   if (typeof env !== 'undefined') {
-     dirs.push(env);
-   }
+  function pushNodeEnv(dirs) {
+    const env = process.env.NODE_ENV;
+    debug(`* process.env.NODE_ENV: "${env}"`);
+    if (typeof env !== 'undefined') {
+      dirs.push(env);
+    }
   }
 
- function pushHostname(dirs) {
-   var hostname = os.hostname();
-   //console.log('* os.hostname(): ' + hostname);
-   if (typeof hostname !== 'undefined') {
-     dirs.push(hostname);
-   }
+  function pushHostname(dirs) {
+    const hostname = os.hostname();
+    debug(`* os.hostname(): "${hostname}"`);
+    if (typeof hostname !== 'undefined') {
+      dirs.push(hostname);
+    }
   }
 
- function pushNodeEnvHostname(dirs) {
-   var env = process.env.NODE_ENV;
-   var hostname = os.hostname();
-   if (typeof env !== 'undefined' && typeof hostname !== 'undefined') {
-     dirs.push(path.join(env, hostname));
-   }
- }
+  function pushNodeEnvHostname(dirs) {
+    const env = process.env.NODE_ENV;
+    const hostname = os.hostname();
+    if (typeof env !== 'undefined' && typeof hostname !== 'undefined') {
+      dirs.push(path.join(env, hostname));
+    }
+  }
 
-  //var dirs = [ 'default' ];
-  var dirs = [];
+  const dirs = [];
   pushDefault(dirs);
   pushNodeEnv(dirs);
   pushHostname(dirs);
   pushNodeEnvHostname(dirs);
 
-  if (options.verbose) {
-    console.log('* getDirs(): dirs:' + JSON.stringify(dirs,null,1));
-  }
+  debug(`* getDirs(): dirs: [${dirs.join(',')}]`);
 
   return dirs;
 };
 
 
-var getFromDirs = function(rootDir, subDirs/*, options*/) {
-  var configs = [];
+const getFromDirs = function(rootDir, subDirs/*, options*/) {
+  const configs = [];
 
-  for (var len=subDirs.length, i=0; i<len; ++i) {
+  for (let len=subDirs.length, i=0; i<len; ++i) {
 
-    var subConfig = req(path.join(rootDir, subDirs[i]), { throwNoDir: false, _parentsToSkip: 1, recursive: true, indexAsParent: true });
-    //config = Object.assign(config, subConfig);
+    const subConfig = req(path.join(rootDir, subDirs[i]), { throwNoDir: false, _parentsToSkip: 1, recursive: true, indexAsParent: true });
     configs.push(subConfig);
 
   }
 
-  //console.log('* getFromDirs(): configs: '+ JSON.stringify(configs,null,2));
+  //debug('* getFromDirs(): configs: '+ JSON.stringify(configs,null,2));
   return configs;
 };
 
 
-//var getFromEnv = function(options) {
+//const getFromEnv = function(options) {
 //
-//	var config = {};
-//	var envConfig = process.env.NODE_CONFIG;
+//	const config = {};
+//	const envConfig = process.env.NODE_CONFIG;
 //
 //	if (typeof envConfig !== 'undefined') {
 //		try {
@@ -100,13 +98,13 @@ var getFromDirs = function(rootDir, subDirs/*, options*/) {
 //		}
 //	}
 //
-//	console.log('* getFromEnv(): config: '+ JSON.stringify(config,null,2));
+//	debug('* getFromEnv(): config: '+ JSON.stringify(config,null,2));
 //	return config;
 //};
 
 
-var stringToConfig = function(s, nameOfString) {
-  var config = {};
+const stringToConfig = function(s, nameOfString) {
+  let config = {};
   if (typeof s !== 'undefined' && s.length !== 0) {
     try {
       config = JSON.parse(s);
@@ -118,90 +116,89 @@ var stringToConfig = function(s, nameOfString) {
 };
 
 
-var getFromEnv = function(/*options*/) {
-  var envConfig = process.env.NODE_CONFIG;
-  var config = stringToConfig(envConfig, 'Environment variable NODE_CONFIG');
+const getFromEnv = function(/*options*/) {
+  const envConfig = process.env.NODE_CONFIG;
+  const config = stringToConfig(envConfig, 'Environment variable NODE_CONFIG');
 
-  //console.log('* getFromEnv(): config: '+ JSON.stringify(config,null,2));
+  //debug('* getFromEnv(): config: '+ JSON.stringify(config,null,2));
   return config;
 };
 
 
-var getFromArgs = function(/*options*/) {
+const getFromArgs = function(/*options*/) {
 
-  var argKey  = '--';
-  var argName = 'NODE_CONFIG';
-  var argEq   = '=';
+  const argKey  = '--';
+  const argName = 'NODE_CONFIG';
+  const argEq   = '=';
 
-  var config = {};
+  let config = {};
 
-  for (var len=process.argv.length, i=2; i<len; ++i) {
-    var argPrefix = argKey+argName+argEq;
+  for (let len=process.argv.length, i=2; i<len; ++i) {
+    const argPrefix = argKey+argName+argEq;
 
     if (process.argv[i ].indexOf(argPrefix) === 0) {
       // argument '--NODE_CONFIG=xyz' found
-      var argConfig = process.argv[i ].substr(argPrefix.length);
+      const argConfig = process.argv[i ].substr(argPrefix.length);
 
       config = stringToConfig(argConfig, 'Command line argument NODE_CONFIG');
       break;
     }
   }
 
-  //console.log('* getFromArgs(): config: '+ JSON.stringify(config,null,2));
+  //debug('* getFromArgs(): config: '+ JSON.stringify(config,null,2));
   return config;
 };
 
 
 function mergeConfigs(configs) {
-  var config = {};
+  let config = {};
 
-  for (var len=configs.length, i=0; i<len; ++i) {
-    //config = Object.assign ? Object.assign(config, configs[ i ]) : assign(config, configs[ i ]);
+  for (let len=configs.length, i=0; i<len; ++i) {
     config = deepAssign(config, configs[ i ]);
   }
 
   return config;
 }
 
+
 function ensureRootExists(relOrAbsDir, options) {
-  var originalModule = moduleParent(module, 0);
-  var parentDir      = path.dirname(originalModule.filename);
-  var absDir         = path.resolve(parentDir, relOrAbsDir);
+  const originalModule = moduleParent(module, 0);
+  const parentDir      = path.dirname(originalModule.filename);
+  const absDir         = path.resolve(parentDir, relOrAbsDir);
   if (!miniFs.dirExistsSync(absDir)) {
-    //throw 'Directory does not exists: "' + relOrAbsDir + '"';
-    if (options.verbose) {
-      console.log('Directory does not exists: "' + relOrAbsDir + '"');
+    const msg = `Directory does not exists: "${relOrAbsDir}"`;
+    if (options.throwNoDir) {
+      throw new Error(msg);
     }
+    debug(msg);
   }
   return absDir;
 }
 
-var configure = function(relOrAbsDir, options) {
+const configure = function(relOrAbsDir, options) {
   options = options || {};
 
   if (typeof relOrAbsDir == 'string') {
     relOrAbsDir = [relOrAbsDir];
   }
 
-  var subDirs = buildDirList(options);
-  var configs = [];
+  const subDirs = buildDirList(options);
+  let configs = [];
 
-  for (var len=relOrAbsDir.length, i=0; i<len; ++i) {
+  for (let len=relOrAbsDir.length, i=0; i<len; ++i) {
     ensureRootExists(relOrAbsDir[i], options);
-    var conf = getFromDirs(relOrAbsDir[i], subDirs, options);
+    const conf = getFromDirs(relOrAbsDir[i], subDirs, options);
     configs = configs.concat(conf);
   }
   configs.push(getFromEnv(options));
   configs.push(getFromArgs(options));
 
-  if (options.verbose) {
-    console.log('* configure(): configs:' + JSON.stringify(configs));
-  }
-  //console.log('* configure(): configs: '+ JSON.stringify(configs,null,2));
+  //debug('* configure(): configs:' + JSON.stringify(configs));
+  //debug('* configure(): configs: '+ JSON.stringify(configs,null,2));
 
-  var config = mergeConfigs(configs);
+  const config = mergeConfigs(configs);
 
-  //console.log('* configure(): config: '+ JSON.stringify(config,null,2));
+  //debug('* configure(): config: '+ JSON.stringify(config,null,2));
   return config;
 };
 
